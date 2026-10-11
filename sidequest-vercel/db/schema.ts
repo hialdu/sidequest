@@ -1,0 +1,7 @@
+// Intentionally empty by default.
+// Add Drizzle tables here when the site actually needs a database.
+// See examples/d1/db/schema.ts for an opt-in example.
+import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+export const sessions = sqliteTable('sessions', { token: text('token').primaryKey(), wallet: text('wallet').notNull(), expires: integer('expires').notNull(), message: text('message').notNull(), verified: integer('verified').notNull().default(0) });
+export const quests = sqliteTable('quests', { id: text('id').primaryKey(), owner: text('owner').notNull(), title: text('title').notNull(), company: text('company').notNull(), description: text('description').notNull(), url: text('url').notNull(), category: text('category').notNull(), reward: integer('reward').notNull(), slots: integer('slots').notNull(), minutes: integer('minutes').notNull(), steps: text('steps').notNull(), criteria: text('criteria').notNull(), created: integer('created').notNull() });
+export const submissions = sqliteTable('submissions', { id: text('id').primaryKey(), questId: text('quest_id').notNull().references(()=>quests.id), wallet: text('wallet').notNull(), answers: text('answers').notNull(), rating: integer('rating').notNull(), status: text('status').notNull().default('pending'), reason: text('reason').notNull().default(''), signature: text('signature'), created: integer('created').notNull() }, t => [uniqueIndex('one_submission_per_wallet').on(t.questId,t.wallet),uniqueIndex('unique_payout_signature').on(t.signature)]);
