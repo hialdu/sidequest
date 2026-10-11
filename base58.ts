@@ -1,0 +1,2 @@
+const alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+export function decode58(str:string):Uint8Array { let n=BigInt(0); for(const c of str){ const v=alphabet.indexOf(c);if(v<0)throw new Error('Invalid wallet address');n=n*BigInt(58)+BigInt(v); }const bytes:number[]=[];while(n>0){bytes.unshift(Number(n%BigInt(256)));n/=BigInt(256);}for(const c of str){if(c!=='1')break;bytes.unshift(0);}return Uint8Array.from(bytes); }
